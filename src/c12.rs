@@ -1,5 +1,3 @@
-
-
 use std::{
   collections::HashMap,
   sync::{Arc, RwLock},
@@ -19,6 +17,17 @@ use serde::{Deserialize, Serialize};
 use tracing::info;
 use ulid::Ulid;
 use uuid::Uuid;
+
+pub fn router() -> Router {
+  let state = Arc::new(RwLock::new(ElapsedState { elapsed_map: HashMap::new() }));
+
+  Router::new()
+    .route("/save/:s", post(store_string))
+    .route("/load/:s", get(elapsed_time))
+    .route("/ulids", post(ulids_to_uuids))
+    .route("/ulids/:w", post(ulids_weekday))
+    .with_state(state)
+}
 
 // part 1
 // Create two endpoints:
@@ -82,7 +91,7 @@ pub async fn elapsed_time(
 /// "01BJQ0E1C3Z56ABCD0E11HYX8P"
 /// ]'
 /// [
-/// "015cae07-0583-f94c-a5b1-a070431f7516", 
+/// "015cae07-0583-f94c-a5b1-a070431f7516",
 /// "015cae07-0583-f94c-a5b1-a070431f74f8",
 /// "015cae07-0583-f94c-a5b1-a070431f74d7",
 /// "015cae07-0583-f94c-a5b1-a070431f74b5",

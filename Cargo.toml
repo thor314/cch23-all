@@ -32,6 +32,8 @@ image = { version = "0.24.8", features = ["png"] }
 ulid = { version = "1.1.2", features = ["uuid"] }
 uuid = "1.7.0"
 chrono = "0.4.34"
+sqlx = { version = "0.7.3", features = ["postgres"] }
+shuttle-shared-db = { version = "0.39.0", features = ["postgres", "sqlx"] }
 
 [dev-dependencies]
 rstest    ="0.18"         # testing convenience proc-macros

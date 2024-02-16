@@ -16,6 +16,7 @@ mod c07;
 mod c08;
 mod c11;
 mod c12;
+mod c13;
 
 use std::{collections::HashMap, sync::{Arc, RwLock}};
 
@@ -39,10 +40,11 @@ async fn error_handler() -> impl IntoResponse {
 
 #[shuttle_runtime::main]
 async fn main(
+  #[shuttle_shared_db::Postgres] pool: sqlx::PgPool,
   #[shuttle_secrets::Secrets] secret_store: shuttle_secrets::SecretStore,
 ) -> shuttle_axum::ShuttleAxum {
   utils::setup(&secret_store).unwrap();
-  let state = Arc::new(RwLock::new(c12::ElapsedState { elapsed_map: HashMap::new() }));
+  sqlx::migrate!().run(&pool).await.unwrap();
 
   info!("hello thor");
 
@@ -61,11 +63,8 @@ async fn main(
     .route("/8/drop/:pokedex", get(poke_drop))
     .nest_service("/11/assets", ServeDir::new("assets"))
     .route("/11/red_pixels", post(red_pixels))
-    .route("/12/save/:s", post(store_string))
-    .route("/12/load/:s", get(elapsed_time))
-    .route("/12/ulids", post(ulids_to_uuids))
-    .route("/12/ulids/:w", post(ulids_weekday))
-    .with_state(state);
+    .nest("/12", c12::router())
+    .nest("/13", c13::router(pool));
 
   Ok(router.into())
 }
