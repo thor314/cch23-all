@@ -15,11 +15,11 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # uncomment to install continuous deployment
-    # steps:
-    #   - uses: shuttle-hq/deploy-action@main
-    #     with:
-    #       deploy-key: ${{ secrets.SHUTTLE_API_KEY }} # in Secrets.toml
+    uncomment to install continuous deployment
+    steps:
+      - uses: shuttle-hq/deploy-action@main
+        with:
+          deploy-key: ${{ secrets.SHUTTLE_API_KEY }} # in Secrets.toml
           ## optional settings
           # working-directory: "backend" # cd here before deploy
           # name: "my-project" # change project name, also set in Shuttle.toml

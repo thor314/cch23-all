@@ -1,3 +1,5 @@
+//! this puzzle demonstrates avoiding cross-site scripting with askama templating. Pretty short and
+//! sweet, especially after the slog of c13's sqlx.
 use askama::Template;
 use axum::{
   debug_handler,
