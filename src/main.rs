@@ -57,7 +57,7 @@ async fn main(
   #[shuttle_secrets::Secrets] secret_store: shuttle_secrets::SecretStore,
 ) -> shuttle_axum::ShuttleAxum {
   utils::setup(&secret_store).unwrap();
-  // sqlx::migrate!().run(&pool).await.unwrap();
+  sqlx::migrate!().run(&pool).await.unwrap();
 
   info!("hello thor");
 
