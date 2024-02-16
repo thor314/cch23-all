@@ -13,27 +13,44 @@ use sqlx::{prelude::FromRow, PgPool, Pool, Postgres};
 use tracing::info;
 
 pub fn router() -> Router {
-  Router::new().route("/14/unsafe", post(unsafe_santa))
-  // .route("/14/safe", post(safe_santa))
+  Router::new().route("/unsafe", post(unsafe_santa)).route("/safe", post(safe_santa))
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Template)]
 // https://github.com/djc/askama
 // https://docs.rs/askama/latest/askama/
-// load the html template and override template extension
+// load the html template and override template extension to allow proper rendering, and also xss
+// #[template(path = "day14.html")]
+// before:
+//     &lt;h1&gt;Welcome to the North Pole!&lt;/h1&gt;
 #[template(path = "day14.html", escape = "none")]
+// after:
+//    <h1>Welcome to the North Pole!</h1>
 struct UnsafeHtmlContent {
   pub content: String,
 }
 
-async fn unsafe_santa(
-  Json(content): Json<UnsafeHtmlContent>,
-) -> Result<(StatusCode, Html<String>), StatusCode> {
-  // println!("{content:?}");
+async fn unsafe_santa(Json(content): Json<UnsafeHtmlContent>) -> Result<Html<String>, StatusCode> {
   info!("content {content:?}");
   let reply_html = UnsafeHtmlContent { content: content.content }.render().map_err(|e| {
     tracing::error!("error while rendering html {e}");
     StatusCode::INTERNAL_SERVER_ERROR
   })?;
-  Ok((StatusCode::OK, Html(reply_html)))
+  Ok(Html(reply_html))
+}
+
+// just remove the escape macro tag
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Template)]
+#[template(path = "day14.html")]
+struct SafeHtmlContent {
+  pub content: String,
+}
+
+async fn safe_santa(Json(content): Json<UnsafeHtmlContent>) -> Result<Html<String>, StatusCode> {
+  println!("{content:?}");
+  let reply_html = SafeHtmlContent { content: content.content }.render().map_err(|e| {
+    tracing::error!("error while rendering html {e}");
+    StatusCode::INTERNAL_SERVER_ERROR
+  })?;
+  Ok(Html(reply_html))
 }
