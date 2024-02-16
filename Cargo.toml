@@ -23,17 +23,24 @@ shuttle-runtime = { version = "0.39", default-features = false }
 serde = { version = "1.0.196", features = ["derive"] }
 shuttle-secrets = "0.39.0"
 serde_json = "1.0.113"
+
 fancy-regex = "0.13"
 base64 = "0.21.7"
 axum-extra = { version = "0.9.2", features = ["cookie", "typed-header"] }
+# 8 poke-ing the pokeapi
 reqwest = "0.11.24"
+# 11 - twiddling images and serving assets
 tower-http = { version = "0.5.1", features = ["fs"] }
 image = { version = "0.24.8", features = ["png"] }
+# 12
 ulid = { version = "1.1.2", features = ["uuid"] }
 uuid = "1.7.0"
 chrono = "0.4.34"
+# 13
 sqlx = { version = "0.7.3", features = ["postgres"] }
 shuttle-shared-db = { version = "0.39.0", features = ["postgres", "sqlx"] }
+askama = { version = "0.12.1"}
+# 14 
 
 [dev-dependencies]
 rstest    ="0.18"         # testing convenience proc-macros

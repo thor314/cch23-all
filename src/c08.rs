@@ -1,4 +1,3 @@
-
 use axum::{
   extract::Path,
   http::StatusCode,
@@ -23,7 +22,9 @@ pub struct PokeWeight {
 /// curl http://localhost:8000/8/weight/25
 ///
 /// 6
-pub async fn poke_weight(Path(pokedex): Path<u32>) -> String { get_weight(pokedex).await.to_string() }
+pub async fn poke_weight(Path(pokedex): Path<u32>) -> String {
+  get_weight(pokedex).await.to_string()
+}
 
 pub async fn get_weight(pokedex: u32) -> f64 {
   let url = format!("https://pokeapi.co/api/v2/pokemon/{}", pokedex);
@@ -34,8 +35,9 @@ pub async fn get_weight(pokedex: u32) -> f64 {
   res.weight as f64 / 10f64
 }
 
-/// Calculate the momentum it would have at the time of impact with the floor if dropped from a 10-meter high chimney.
-/// The GET endpoint /8/drop/<pokedex_number> shall respond with a plain text floating point number.
+/// Calculate the momentum it would have at the time of impact with the floor if dropped from a
+/// 10-meter high chimney. The GET endpoint /8/drop/<pokedex_number> shall respond with a plain text
+/// floating point number.
 ///
 /// Use gravitational acceleration g = 9.825 m/s². Ignore air resistance.
 pub async fn poke_drop(Path(pokedex): Path<u32>) -> String {

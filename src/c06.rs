@@ -1,4 +1,3 @@
-
 use axum::{
   http::StatusCode,
   response::IntoResponse,
@@ -6,7 +5,6 @@ use axum::{
   Json, Router,
 };
 use tracing::info;
-
 
 #[derive(serde::Serialize)]
 pub struct Response {
@@ -21,14 +19,14 @@ pub struct Response {
 /// substring "elf" appears.
 // use String for content type `text/plain`
 pub async fn elf_regex(elf_string: String) -> impl IntoResponse {
-        let elf = elf_string.matches("elf").count();
-        let count_elf_on_a_shelf = fancy_regex::Regex::new("elf(?= on a shelf)")
-            .expect("Could not make regex")
-       .captures_iter(&elf_string)
-            .count();
-        let count_shelf = elf_string.matches("shelf").count();
-        let count_shelf_with_no_elf_on_it = count_shelf - count_elf_on_a_shelf;
-            // num::CheckedSub::checked_sub(&shelf, &elf_on_a_shelf).expect("Arithmetic Failure");
+  let elf = elf_string.matches("elf").count();
+  let count_elf_on_a_shelf = fancy_regex::Regex::new("elf(?= on a shelf)")
+    .expect("Could not make regex")
+    .captures_iter(&elf_string)
+    .count();
+  let count_shelf = elf_string.matches("shelf").count();
+  let count_shelf_with_no_elf_on_it = count_shelf - count_elf_on_a_shelf;
+  // num::CheckedSub::checked_sub(&shelf, &elf_on_a_shelf).expect("Arithmetic Failure");
 
   let response = Response { elf, count_elf_on_a_shelf, count_shelf_with_no_elf_on_it };
   Json(response)

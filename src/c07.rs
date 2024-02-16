@@ -1,4 +1,3 @@
-
 use std::collections::HashMap;
 
 use axum::{
@@ -97,7 +96,6 @@ fn reduce_pantry(pantry: &AnyPantry, recipe: &AnyRecipe, count: usize) -> AnyPan
     })
     .collect()
 }
-
 
 // these are not general as requested in task 3
 

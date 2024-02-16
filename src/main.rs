@@ -5,9 +5,6 @@
 #![allow(non_snake_case)]
 #![allow(clippy::clone_on_copy)]
 
-mod error;
-#[cfg(test)] mod tests;
-mod utils;
 mod c01;
 mod c04;
 mod c05;
@@ -17,8 +14,15 @@ mod c08;
 mod c11;
 mod c12;
 mod c13;
+mod c14;
+mod error;
+#[cfg(test)] mod tests;
+mod utils;
 
-use std::{collections::HashMap, sync::{Arc, RwLock}};
+use std::{
+  collections::HashMap,
+  sync::{Arc, RwLock},
+};
 
 use axum::{
   http::StatusCode,
@@ -30,7 +34,16 @@ use error::MyError;
 use tower_http::services::ServeDir;
 use tracing::info;
 
-use crate::{c01::calculate_sled_id, c04::{calculate_total_strength, contest_summary}, c05::paginate_names, c06::elf_regex, c07::{cookie_handler, secret_cookie_handler}, c08::{poke_drop, poke_weight}, c11::red_pixels, c12::{elapsed_time, store_string, ulids_to_uuids, ulids_weekday}};
+use crate::{
+  c01::calculate_sled_id,
+  c04::{calculate_total_strength, contest_summary},
+  c05::paginate_names,
+  c06::elf_regex,
+  c07::{cookie_handler, secret_cookie_handler},
+  c08::{poke_drop, poke_weight},
+  c11::red_pixels,
+  c12::{elapsed_time, store_string, ulids_to_uuids, ulids_weekday},
+};
 
 async fn hello_world() -> &'static str { "Hello, world!" }
 
@@ -44,7 +57,7 @@ async fn main(
   #[shuttle_secrets::Secrets] secret_store: shuttle_secrets::SecretStore,
 ) -> shuttle_axum::ShuttleAxum {
   utils::setup(&secret_store).unwrap();
-  sqlx::migrate!().run(&pool).await.unwrap();
+  // sqlx::migrate!().run(&pool).await.unwrap();
 
   info!("hello thor");
 
@@ -64,7 +77,8 @@ async fn main(
     .nest_service("/11/assets", ServeDir::new("assets"))
     .route("/11/red_pixels", post(red_pixels))
     .nest("/12", c12::router())
-    .nest("/13", c13::router(pool));
+    .nest("/13", c13::router(pool))
+    .nest("/14", c14::router());
 
   Ok(router.into())
 }

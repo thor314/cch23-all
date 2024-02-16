@@ -20,6 +20,15 @@ cargo shuttle run
 cargo shuttle project start # only needed the first time
 cargo shuttle deploy
 ```
+
+## SQL is migrations are not pure
+if db issues arise:
+```fish
+set DATABASE_URL postgres://postgres:postgres@localhost:18607/postgres
+sqlx migrate run
+cargo sqlx prepare # check migrations have been correctly run
+```
+
 ## Project created with flags:
 - project-name: cch23-all
 - description:  cch23-all
