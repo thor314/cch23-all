@@ -15,6 +15,7 @@ mod c11;
 mod c12;
 mod c13;
 mod c14;
+mod c15;
 mod error;
 #[cfg(test)] mod tests;
 mod utils;
@@ -78,7 +79,8 @@ async fn main(
     .route("/11/red_pixels", post(red_pixels))
     .nest("/12", c12::router())
     .nest("/13", c13::router(pool))
-    .nest("/14", c14::router());
+    .nest("/14", c14::router())
+    .nest("/15", c15::router());
 
   Ok(router.into())
 }
