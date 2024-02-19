@@ -16,6 +16,7 @@ mod c12;
 mod c13;
 mod c14;
 mod c15;
+mod c16;
 mod error;
 #[cfg(test)] mod tests;
 mod utils;
@@ -80,7 +81,8 @@ async fn main(
     .nest("/12", c12::router())
     .nest("/13", c13::router(pool))
     .nest("/14", c14::router())
-    .nest("/15", c15::router());
+    .nest("/15", c15::router())
+    .nest("/16", c16::router());
 
   Ok(router.into())
 }
